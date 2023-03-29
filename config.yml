@@ -1,0 +1,16 @@
+# Configuration settings for WebsiteAvailabilityMonitor
+
+# Kafka settings
+kafka:
+  topic: website_metrics
+  producer_interval: 60 Time interval (in seconds) between website checks
+
+# PostgreSQL settings
+postgresql:
+  table_name: website_metrics
+
+# List of target websites and their monitoring settings
+websites:
+  - url: https://google.com
+  - url: https://lichess.org
+    regexp: Lichess is open source
