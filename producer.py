@@ -15,7 +15,7 @@ class MessageProducer(ABC):
 
 class KafkaProducer(MessageProducer, AIOKafkaProducer):
     def __init__(self, bootstrap_servers):
-        AIOKafkaProducer.__init__(self, bootstrap_servers=bootstrap_servers)
+        super().__init__(bootstrap_servers=bootstrap_servers)
 
     async def send_message(self, topic, message):
         serialized_message = json.dumps(message).encode('utf-8')

@@ -1,6 +1,6 @@
 import pytest
 import json
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, patch
 from producer import MessageProducer, KafkaProducer, ProducerFactory
 
 # Test data
@@ -17,7 +17,7 @@ def test_message_producer_abstract_methods():
 
 @pytest.mark.asyncio
 async def test_kafka_producer_send_message():
-    with patch("producer.AIOKafkaProducer") as MockAIOKafkaProducer:
+    with patch("producer.AIOKafkaProducer"):
         producer = KafkaProducer(bootstrap_servers)
         producer.send_and_wait = AsyncMock(return_value=None)
 
@@ -47,7 +47,6 @@ def test_get_kafka_producer(mock_kafka_producer):
 
 
 def test_get_unsupported_producer():
-    bootstrap_servers = "localhost:9092"
     producer_type = "unsupported"
 
     with pytest.raises(ValueError) as exc_info:
