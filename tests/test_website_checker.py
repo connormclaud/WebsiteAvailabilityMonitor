@@ -7,9 +7,9 @@ from unittest.mock import patch
 @pytest.mark.asyncio
 async def test_check_website_success():
     async with aiohttp.ClientSession() as session:
-        result = await check_website(session, "https://httpbin.org/get")
+        result = await check_website(session, "http://localhost/get")
 
-        assert result["url"] == "https://httpbin.org/get"
+        assert result["url"] == "http://localhost/get"
         assert 0 <= result["response_time"] <= 5
         assert result["status_code"] == 200
         assert result["content_check"] is None
@@ -18,9 +18,9 @@ async def test_check_website_success():
 @pytest.mark.asyncio
 async def test_check_website_failure():
     async with aiohttp.ClientSession() as session:
-        result = await check_website(session, "https://httpbin.org/status/404")
+        result = await check_website(session, "http://localhost/status/404")
 
-        assert result["url"] == "https://httpbin.org/status/404"
+        assert result["url"] == "http://localhost/status/404"
         assert 0 <= result["response_time"] <= 5
         assert result["status_code"] == 404
         assert result["content_check"] is None
@@ -30,9 +30,9 @@ async def test_check_website_failure():
 async def test_check_website_content_match():
     async with aiohttp.ClientSession() as session:
         pattern = r"Herman Melville"
-        result = await check_website(session, "https://httpbin.org/html", regexp=pattern)
+        result = await check_website(session, "http://localhost/html", regexp=pattern)
 
-        assert result["url"] == "https://httpbin.org/html"
+        assert result["url"] == "http://localhost/html"
         assert result["content_check"]
 
 
@@ -40,7 +40,7 @@ async def test_check_website_content_match():
 async def test_check_website_exception_handling():
     async with aiohttp.ClientSession() as session:
         with patch('aiohttp.ClientSession.get', side_effect=Exception("Test exception")):
-            result = await check_website(session, "https://httpbin.org/get")
+            result = await check_website(session, "http://localhost/get")
             assert result is None
 
 
@@ -48,7 +48,7 @@ async def test_check_website_exception_handling():
 async def test_main_function():
     async def mock_check_website(*args, **kwargs):
         return {
-            "url": "https://httpbin.org/get",
+            "url": "http://localhost/get",
             "response_time": 0.1,
             "status_code": 200,
             "content_check": None,

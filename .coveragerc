@@ -2,3 +2,4 @@
 
 exclude_lines =
     if __name__\s*==\s*['"]__main__['"]\s*:
+    @abstractmethod

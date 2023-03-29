@@ -1,0 +1,37 @@
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.2
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka:
+    image: confluentinc/cp-kafka:7.3.2
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  postgres:
+    image: postgres:15.2
+    restart: always
+    env_file:
+      - postgres.env
+    environment:
+       POSTGRES_DB: website_metrics
+    ports:
+      - "5432:5432"
+
+  httpbin:
+    image: kennethreitz/httpbin
+    container_name: httpbin
+    ports:
+      - '80:80'
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
