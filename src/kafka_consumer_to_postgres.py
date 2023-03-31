@@ -8,6 +8,22 @@ import yaml
 from website_monitor.consumer import ConsumerFactory
 from website_monitor.db_writer import DatabaseWriterFactory
 
+INSERT_QUERY_WITH_PARAMETERS = """
+        INSERT INTO website_metrics (url, response_time, status_code, content_check, timestamp)
+        VALUES ($1, $2, $3, $4, $5)
+    """
+
+CREATE_TABLE_QUERY = """
+        CREATE TABLE IF NOT EXISTS website_metrics (
+            id SERIAL PRIMARY KEY,
+            url TEXT NOT NULL,
+            response_time DOUBLE PRECISION NOT NULL,
+            status_code INTEGER NOT NULL,
+            content_check BOOLEAN,
+            timestamp TIMESTAMP NOT NULL
+        );
+    """
+
 
 def read_config(file_path):
     with open(file_path, "r") as config_file:
@@ -32,30 +48,17 @@ def create_consumer_and_writer(config):
 
 
 async def process_messages(consumer, db_writer):
-    query = """
-        INSERT INTO website_metrics (url, response_time, status_code, content_check, timestamp)
-        VALUES ($1, $2, $3, $4, $5)
-    """
     async for message in consumer.consume():
         print(f"Received message: {message}")
         metric = json.loads(message.value.decode("utf-8"))
         timestamp = datetime.datetime.fromisoformat(metric["timestamp"])
-        await db_writer.execute(query, metric["url"], metric["response_time"], metric["status_code"],
+        await db_writer.execute(INSERT_QUERY_WITH_PARAMETERS, metric["url"], metric["response_time"],
+                                metric["status_code"],
                                 metric["content_check"], timestamp)
 
 
 async def create_website_metrics_table_if_not_exists(db_writer):
-    create_table_query = """
-        CREATE TABLE IF NOT EXISTS website_metrics (
-            id SERIAL PRIMARY KEY,
-            url TEXT NOT NULL,
-            response_time DOUBLE PRECISION NOT NULL,
-            status_code INTEGER NOT NULL,
-            content_check BOOLEAN,
-            timestamp TIMESTAMP NOT NULL
-        );
-    """
-    await db_writer.execute(create_table_query)
+    await db_writer.execute(CREATE_TABLE_QUERY)
 
 
 async def main(config):

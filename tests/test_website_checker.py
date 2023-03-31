@@ -66,9 +66,6 @@ async def test_main_function():
         pass
 
     class MockProducer:
-        async def send_and_wait(self, *args, **kwargs):
-            pass
-
         async def close(self):
             pass
 
