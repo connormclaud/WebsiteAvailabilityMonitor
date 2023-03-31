@@ -33,7 +33,7 @@ async def test_postgres_writer_write():
         writer = PostgresWriter(dsn)
         await writer.connect()
 
-        await writer.write(query, *params)
+        await writer.execute(query, *params)
 
         mock_execute.assert_called_once_with(query, *params)
 
@@ -59,7 +59,7 @@ async def test_postgres_writer_write_without_connect():
     writer = PostgresWriter(dsn)
 
     with pytest.raises(RuntimeError, match="Database connection not established"):
-        await writer.write(query, *params)
+        await writer.execute(query, *params)
 
 
 def test_get_postgres_writer():

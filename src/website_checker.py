@@ -1,11 +1,11 @@
 import asyncio
 import datetime
-from asyncio import as_completed
-
-import aiohttp
 import re
 import time
+from asyncio import as_completed
 from typing import Optional, Dict
+
+import aiohttp
 import yaml
 
 from website_monitor.producer import ProducerFactory
@@ -79,7 +79,7 @@ async def main(config, run_once=False, producer_factory=ProducerFactory, client_
     async with client_session as session, producer:
         while True:
             tasks = await create_website_check_tasks(session, websites)
-
+            print("Processing websites...")
             await process_website_checks(tasks, timeout, producer, kafka_topic, task_manager)
 
             await asyncio.sleep(interval)

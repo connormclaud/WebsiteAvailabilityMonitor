@@ -18,7 +18,7 @@ services:
       - httpbin
       - base
     volumes:
-      - ./src/website_monitor:/app/website_monitor
+      - ./src/:/app/
       - ./tests:/app/tests
     environment:
       PYTHONPATH: /app

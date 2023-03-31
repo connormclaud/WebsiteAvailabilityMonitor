@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
+
 from aiokafka import AIOKafkaConsumer
+from aiokafka.errors import KafkaConnectionError
+from tenacity import retry, wait_exponential, stop_after_attempt, retry_if_exception_type
 
 
 class MessageConsumer(ABC):
@@ -21,7 +24,7 @@ class KafkaConsumer(MessageConsumer, AIOKafkaConsumer):
         super().__init__(topic, bootstrap_servers=bootstrap_servers)
 
     async def start(self):
-        await super().start()
+        await AIOKafkaConsumer.start(self)
 
     async def consume(self):
         async for msg in self:
@@ -29,6 +32,18 @@ class KafkaConsumer(MessageConsumer, AIOKafkaConsumer):
 
     async def close(self):
         await super().stop()
+
+    @retry(
+        wait=wait_exponential(multiplier=1, min=2, max=60),
+        stop=stop_after_attempt(5),
+        retry=retry_if_exception_type(KafkaConnectionError)
+    )
+    async def __aenter__(self):
+        await self.start()
+        return self
+
+    async def __aexit__(self, exc_type, exc_value, traceback):
+        await self.close()
 
 
 class ConsumerFactory:

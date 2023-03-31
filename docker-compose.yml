@@ -46,12 +46,23 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.website_checker
+    volumes:
+      - ./src/:/app/
+      - ./tests:/app/tests
     depends_on:
       - kafka
+
 
   kafka_consumer_to_postgres:
     build:
       context: .
       dockerfile: Dockerfile.kafka_to_postgres
+    env_file:
+      - postgres.env
+    volumes:
+      - ./src/:/app/
+      - ./tests:/app/tests
     depends_on:
       - postgres
+      - kafka
+      - website_checker

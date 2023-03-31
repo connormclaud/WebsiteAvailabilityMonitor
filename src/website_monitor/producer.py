@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 import json
 from aiokafka import AIOKafkaProducer
+from tenacity import retry, wait_exponential, stop_after_attempt, retry_if_exception_type
+from aiokafka.errors import KafkaConnectionError
 
 
 class MessageProducer(ABC):
@@ -23,6 +25,15 @@ class KafkaProducer(MessageProducer, AIOKafkaProducer):
 
     async def close(self):
         await super().stop()
+
+    @retry(
+        wait=wait_exponential(multiplier=1, min=2, max=60),
+        stop=stop_after_attempt(5),
+        retry=retry_if_exception_type(KafkaConnectionError)
+    )
+    async def __aenter__(self):
+        await self.start()
+        return self
 
 
 class ProducerFactory:

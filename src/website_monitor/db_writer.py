@@ -8,7 +8,7 @@ class DatabaseWriter(ABC):
         pass
 
     @abstractmethod
-    async def write(self, query, *params):
+    async def execute(self, query, *params):
         pass
 
     @abstractmethod
@@ -24,7 +24,7 @@ class PostgresWriter(DatabaseWriter):
     async def connect(self):
         self._conn = await asyncpg.connect(self._dsn)
 
-    async def write(self, query, *params):
+    async def execute(self, query, *params):
         if not self._conn:
             raise RuntimeError("Database connection not established")
         await self._conn.execute(query, *params)

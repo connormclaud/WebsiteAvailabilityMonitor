@@ -2,4 +2,4 @@
 FROM website_monitor_base
 
 # run the website Kafka to Postgres service
-CMD ["python", "website_monitor/kafka_consumer_to_postgres.py"]
+CMD ["python", "-u", "kafka_consumer_to_postgres.py"]
