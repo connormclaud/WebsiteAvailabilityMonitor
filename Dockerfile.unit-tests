@@ -1,0 +1,7 @@
+# base image
+FROM website_monitor_base
+
+COPY tests/ ./tests
+
+# run tests
+CMD ["pytest", "-v", "--cov", "--cov-report=term-missing", "tests/"]

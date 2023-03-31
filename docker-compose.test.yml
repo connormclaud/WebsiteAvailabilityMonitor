@@ -1,0 +1,27 @@
+services:
+  httpbin:
+    image: kennethreitz/httpbin
+    container_name: httpbin
+
+  base:
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+    image: website_monitor_base
+    entrypoint: /bin/true
+
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.unit-tests
+    depends_on:
+      - httpbin
+      - base
+    volumes:
+      - ./src/website_monitor:/app/website_monitor
+      - ./tests:/app/tests
+    environment:
+      PYTHONPATH: /app
+    command: pytest --cov=/app --cov-report=term-missing -vv
+
+

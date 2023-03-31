@@ -1,7 +1,7 @@
 import pytest
 import json
 from unittest.mock import AsyncMock, patch
-from src.producer import MessageProducer, KafkaProducer, ProducerFactory
+from website_monitor.producer import MessageProducer, KafkaProducer, ProducerFactory
 
 # Test data
 test_topic = "test_topic"
@@ -17,7 +17,7 @@ def test_message_producer_abstract_methods():
 
 @pytest.mark.asyncio
 async def test_kafka_producer_send_message():
-    with patch("producer.AIOKafkaProducer"):
+    with patch("website_monitor.producer.AIOKafkaProducer"):
         producer = KafkaProducer(bootstrap_servers)
         producer.send_and_wait = AsyncMock(return_value=None)
 
@@ -28,7 +28,7 @@ async def test_kafka_producer_send_message():
 
 @pytest.mark.asyncio
 async def test_kafka_producer_close():
-    with patch("producer.AIOKafkaProducer.stop", new_callable=AsyncMock) as mock_stop:
+    with patch("website_monitor.producer.AIOKafkaProducer.stop", new_callable=AsyncMock) as mock_stop:
         producer = KafkaProducer(bootstrap_servers)
 
         await producer.close()
@@ -36,7 +36,7 @@ async def test_kafka_producer_close():
         mock_stop.assert_called_once()
 
 
-@patch("producer.KafkaProducer", autospec=True)
+@patch("website_monitor.producer.KafkaProducer", autospec=True)
 def test_get_kafka_producer(mock_kafka_producer):
     producer = ProducerFactory.get_producer("kafka", bootstrap_servers)
 

@@ -36,7 +36,7 @@ A Kafka consumer then stores the data in an PostgreSQL database.
    ```
 2. Run the Kafka consumer:
    ```
-   python kafka_consumer.py
+   python kafka_consumer_to_postgres.py
    ```
 
 ## Contributing

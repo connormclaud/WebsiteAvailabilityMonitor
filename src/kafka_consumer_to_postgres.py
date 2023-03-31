@@ -22,20 +22,19 @@ async def main(config):
     async with consumer, db_writer:
         try:
             query = """
-                INSERT INTO website_metrics (url, response_time, status_code, content_check)
-                VALUES ($1, $2, $3, $4)
+                INSERT INTO website_metrics (url, response_time, status_code, content_check, timestamp)
+                VALUES ($1, $2, $3, $4, $5)
             """
             async for message in consumer.consume():
                 print(f"Received message: {message}")
 
                 await db_writer.write(query, message["url"], message["response_time"], message["status_code"],
-                                      message["content_check"])
+                                      message["content_check"], message["timestamp"])
         except KeyboardInterrupt:
             print("Shutting down...")
 
-
 if __name__ == "__main__":
-    with open("config.yml", "r") as config_file:
+    with open("website_monitor/config.yml", "r") as config_file:
         configuration = yaml.safe_load(config_file)
 
     asyncio.run(main(configuration))

@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, AsyncMock
-from src.consumer import MessageConsumer, KafkaConsumer, ConsumerFactory
+from website_monitor.consumer import MessageConsumer, KafkaConsumer, ConsumerFactory
 
 # Test data
 test_topic = "test_topic"
@@ -14,7 +14,7 @@ def test_message_consumer_abstract_methods():
 
 @pytest.mark.asyncio
 async def test_kafka_consumer_close():
-    with patch("consumer.AIOKafkaConsumer.stop", new_callable=AsyncMock) as mock_stop:
+    with patch("website_monitor.consumer.AIOKafkaConsumer.stop", new_callable=AsyncMock) as mock_stop:
         consumer = KafkaConsumer(bootstrap_servers, test_topic)
 
         await consumer.close()
@@ -22,7 +22,7 @@ async def test_kafka_consumer_close():
         mock_stop.assert_called_once()
 
 
-@patch("consumer.KafkaConsumer", autospec=True)
+@patch("website_monitor.consumer.KafkaConsumer", autospec=True)
 def test_get_kafka_producer(mock_kafka_consumer):
     consumer_type = "kafka"
 

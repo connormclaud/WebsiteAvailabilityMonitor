@@ -1,6 +1,7 @@
 # Configuration settings for WebsiteAvailabilityMonitor
 
 producer_interval: 60
+timeout: 10
 
 # Kafka settings
 kafka:

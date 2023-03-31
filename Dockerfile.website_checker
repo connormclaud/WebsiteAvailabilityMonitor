@@ -1,0 +1,5 @@
+# base image
+FROM website_monitor_base
+
+# run the website checker service
+CMD ["python", "website_monitor/website_checker.py"]

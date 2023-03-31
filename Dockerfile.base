@@ -1,0 +1,12 @@
+# base image
+FROM python:3.11-slim-buster
+
+# set working directory
+WORKDIR /app
+
+# copy requirements file and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# copy source code
+COPY src/ .

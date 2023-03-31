@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
-from src.db_writer import DatabaseWriter, PostgresWriter, DatabaseWriterFactory
+from website_monitor.db_writer import DatabaseWriter, PostgresWriter, DatabaseWriterFactory
 
 dsn = "postgresql://user:password@localhost/dbname"
 query = "INSERT INTO my_table (column1, column2) VALUES ($1, $2)"

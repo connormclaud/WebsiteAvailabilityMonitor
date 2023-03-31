@@ -29,14 +29,29 @@ services:
     ports:
       - "5432:5432"
 
-  httpbin:
-    image: kennethreitz/httpbin
-    container_name: httpbin
-    ports:
-      - '8080:80'
-
   adminer:
     image: adminer
     restart: always
     ports:
       - "8080:8080"
+
+  base:
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+    image: website_monitor_base
+    entrypoint: /bin/true
+
+  website_checker:
+    build:
+      context: .
+      dockerfile: Dockerfile.website_checker
+    depends_on:
+      - kafka
+
+  kafka_consumer_to_postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile.kafka_to_postgres
+    depends_on:
+      - postgres
