@@ -1,7 +1,7 @@
 import pytest
 import json
 from unittest.mock import AsyncMock, patch
-from producer import MessageProducer, KafkaProducer, ProducerFactory
+from src.producer import MessageProducer, KafkaProducer, ProducerFactory
 
 # Test data
 test_topic = "test_topic"
@@ -38,9 +38,7 @@ async def test_kafka_producer_close():
 
 @patch("producer.KafkaProducer", autospec=True)
 def test_get_kafka_producer(mock_kafka_producer):
-    producer_type = "kafka"
-
-    producer = ProducerFactory.get_producer(producer_type, bootstrap_servers)
+    producer = ProducerFactory.get_producer("kafka", bootstrap_servers)
 
     mock_kafka_producer.assert_called_once_with(bootstrap_servers)
     assert isinstance(producer, KafkaProducer)

@@ -32,7 +32,7 @@ A Kafka consumer then stores the data in an PostgreSQL database.
 ## Usage Instructions
 1. Run the Kafka producer:
    ```
-   python kafka_producer.py
+   python website_checker.py
    ```
 2. Run the Kafka consumer:
    ```
@@ -80,7 +80,6 @@ graph TD
     KafkaConsumer1 -->|Writes metrics to| PostgreSQLDatabase{{PostgreSQL Database}}
     KafkaConsumer2 -->|Writes metrics to| PostgreSQLDatabase
 end
-
 ```
 
 ## Website Checker

@@ -1,13 +1,15 @@
 # Configuration settings for WebsiteAvailabilityMonitor
 
+producer_interval: 60
+
 # Kafka settings
 kafka:
+  bootstrap_servers: localhost:29092
   topic: website_metrics
-  producer_interval: 60 Time interval (in seconds) between website checks
 
 # PostgreSQL settings
-postgresql:
-  table_name: website_metrics
+postgres:
+  dsn: "postgres://{POSTGRES_USER}:{POSTGRES_PASSWORD}@localhost:5432/website_metrics"
 
 # List of target websites and their monitoring settings
 websites:

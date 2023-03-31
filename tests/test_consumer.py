@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, AsyncMock
-from consumer import MessageConsumer, KafkaConsumer, ConsumerFactory
+from src.consumer import MessageConsumer, KafkaConsumer, ConsumerFactory
 
 # Test data
 test_topic = "test_topic"
