@@ -22,7 +22,12 @@ def read_config(config_file_path: str) -> Dict:
         "POSTGRES_DB": os.environ.get("POSTGRES_DB", ""),
         "KAFKA_HOST": os.environ.get("KAFKA_HOST", ""),
         "KAFKA_PORT": os.environ.get("KAFKA_PORT", ""),
-        "KAFKA_TOPIC": os.environ.get("KAFKA_TOPIC", "")
+        "KAFKA_TOPIC": os.environ.get("KAFKA_TOPIC", ""),
+        "KAFKA_SECURITY_PROTOCOL": os.environ.get("KAFKA_SECURITY_PROTOCOL", "PLAINTEXT"),
+        "KAFKA_SSL_KEYFILE": os.environ.get("KAFKA_SSL_KEYFILE", ""),
+        "KAFKA_SSL_CERTFILE": os.environ.get("KAFKA_SSL_CERTFILE", ""),
+        "KAFKA_SSL_CAFILE": os.environ.get("KAFKA_SSL_CAFILE", "")
+
     }
 
     with open(config_file_path, "r") as config_file:

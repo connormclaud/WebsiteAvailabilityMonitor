@@ -1,8 +1,11 @@
-from abc import ABC, abstractmethod
 import json
+from abc import ABC, abstractmethod
+
 from aiokafka import AIOKafkaProducer
-from tenacity import retry, wait_exponential, stop_after_attempt, retry_if_exception_type
 from aiokafka.errors import KafkaConnectionError
+from tenacity import retry, wait_exponential, stop_after_attempt, retry_if_exception_type
+
+from website_monitor.kafka_util import create_kafka_ssl_context
 
 
 class MessageProducer(ABC):
@@ -16,8 +19,10 @@ class MessageProducer(ABC):
 
 
 class KafkaProducer(MessageProducer, AIOKafkaProducer):
-    def __init__(self, bootstrap_servers):
-        super().__init__(bootstrap_servers=bootstrap_servers)
+    def __init__(self, bootstrap_servers, security_protocol="PLAINTEXT", ssl_config=None):
+        ssl_context = create_kafka_ssl_context(security_protocol, ssl_config)
+        super().__init__(bootstrap_servers=bootstrap_servers, security_protocol=security_protocol,
+                         ssl_context=ssl_context)
 
     async def send_message(self, topic, message):
         serialized_message = json.dumps(message).encode('utf-8')
@@ -41,8 +46,8 @@ class KafkaProducer(MessageProducer, AIOKafkaProducer):
 
 class ProducerFactory:
     @staticmethod
-    def get_producer(producer_type, bootstrap_servers):
+    def get_producer(producer_type, bootstrap_servers, security_protocol="PLAINTEXT", ssl_config=None):
         if producer_type == 'kafka':
-            return KafkaProducer(bootstrap_servers)
+            return KafkaProducer(bootstrap_servers, security_protocol, ssl_config)
         else:
             raise ValueError(f"Unsupported producer type: {producer_type}")

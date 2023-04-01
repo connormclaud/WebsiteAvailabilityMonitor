@@ -52,7 +52,9 @@ async def test_main_function():
         "timeout": 10,
         "kafka": {
             "bootstrap_servers": "localhost:29092",
-            "topic": "website_metrics"
+            "topic": "website_metrics",
+            "security_protocol": "PLAINTEXT",
+            "ssl": {}
         }
     }
 

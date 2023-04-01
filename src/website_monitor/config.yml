@@ -5,9 +5,13 @@ timeout: 10
 
 # Kafka settings
 kafka:
-  bootstrap_servers: {KAFKA_HOST}:{KAFKA_PORT}
-  topic: {KAFKA_TOPIC}
-  security_protocol: PLAINTEXT  # PLAINTEXT or SSL
+  bootstrap_servers: "{KAFKA_HOST}:{KAFKA_PORT}"
+  topic: "{KAFKA_TOPIC}"
+  security_protocol: "{KAFKA_SECURITY_PROTOCOL}"  # PLAINTEXT or SSL
+  ssl:
+    key: "{KAFKA_SSL_KEYFILE}"
+    cert: "{KAFKA_SSL_CERTFILE}"
+    cakey: "{KAFKA_SSL_CAFILE}"
 
 # PostgreSQL settings
 database:

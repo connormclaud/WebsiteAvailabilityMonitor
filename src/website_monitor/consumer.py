@@ -4,6 +4,8 @@ from aiokafka import AIOKafkaConsumer
 from aiokafka.errors import KafkaConnectionError
 from tenacity import retry, wait_exponential, stop_after_attempt, retry_if_exception_type
 
+from website_monitor.kafka_util import create_kafka_ssl_context
+
 
 class MessageConsumer(ABC):
     @abstractmethod
@@ -20,8 +22,10 @@ class MessageConsumer(ABC):
 
 
 class KafkaConsumer(MessageConsumer, AIOKafkaConsumer):
-    def __init__(self, bootstrap_servers, topic):
-        super().__init__(topic, bootstrap_servers=bootstrap_servers)
+    def __init__(self, bootstrap_servers, topic, security_protocol="PLAINTEXT", ssl_config=None):
+        ssl_context = create_kafka_ssl_context(security_protocol, ssl_config)
+        super().__init__(topic, bootstrap_servers=bootstrap_servers,
+                         security_protocol=security_protocol, ssl_context=ssl_context)
 
     async def start(self):
         await AIOKafkaConsumer.start(self)
@@ -48,8 +52,8 @@ class KafkaConsumer(MessageConsumer, AIOKafkaConsumer):
 
 class ConsumerFactory:
     @staticmethod
-    def get_consumer(consumer_type, bootstrap_servers, topic):
+    def get_consumer(consumer_type, bootstrap_servers, topic, security_protocol="PLAINTEXT", ssl_config=None):
         if consumer_type == 'kafka':
-            return KafkaConsumer(bootstrap_servers, topic)
+            return KafkaConsumer(bootstrap_servers, topic, security_protocol, ssl_config=ssl_config)
         else:
             raise ValueError(f"Unsupported consumer type: {consumer_type}")

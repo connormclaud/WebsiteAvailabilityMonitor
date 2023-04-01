@@ -23,12 +23,12 @@ async def test_kafka_consumer_close():
 
 
 @patch("website_monitor.consumer.KafkaConsumer", autospec=True)
-def test_get_kafka_producer(mock_kafka_consumer):
+def test_get_kafka_consumer(mock_kafka_consumer):
     consumer_type = "kafka"
 
     consumer = ConsumerFactory.get_consumer(consumer_type, bootstrap_servers, test_topic)
 
-    mock_kafka_consumer.assert_called_once_with(bootstrap_servers, test_topic)
+    mock_kafka_consumer.assert_called_once_with(bootstrap_servers, 'test_topic', 'PLAINTEXT', ssl_config=None)
     assert isinstance(consumer, KafkaConsumer)
 
 

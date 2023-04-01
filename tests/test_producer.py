@@ -40,7 +40,7 @@ async def test_kafka_producer_close():
 def test_get_kafka_producer(mock_kafka_producer):
     producer = ProducerFactory.get_producer("kafka", bootstrap_servers)
 
-    mock_kafka_producer.assert_called_once_with(bootstrap_servers)
+    mock_kafka_producer.assert_called_once_with(bootstrap_servers, "PLAINTEXT", None)
     assert isinstance(producer, KafkaProducer)
 
 

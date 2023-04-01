@@ -3,10 +3,9 @@ import datetime
 import re
 import time
 from asyncio import as_completed
-from typing import Optional, Dict
+from typing import Optional
 
 import aiohttp
-import yaml
 
 from website_monitor.config_reader import read_config
 from website_monitor.producer import ProducerFactory
@@ -67,8 +66,10 @@ async def main(config, run_once=False, producer_factory=ProducerFactory, client_
     bootstrap_servers = config["kafka"]["bootstrap_servers"]
     kafka_topic = config["kafka"]["topic"]
     timeout = config["timeout"]
+    kafka_security_protocol = config["kafka"]["security_protocol"]
+    kafka_ssl_config = config["kafka"]["ssl"]
 
-    producer = producer_factory.get_producer("kafka", bootstrap_servers)
+    producer = producer_factory.get_producer("kafka", bootstrap_servers, kafka_security_protocol, kafka_ssl_config)
     if not client_session:
         client_session = aiohttp.ClientSession()
 

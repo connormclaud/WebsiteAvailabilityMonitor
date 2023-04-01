@@ -46,6 +46,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.website_checker
+    env_file:
+      - postgres.env
+      - kafka.env
     volumes:
       - ./src/:/app/
       - ./tests:/app/tests
@@ -59,6 +62,7 @@ services:
       dockerfile: Dockerfile.kafka_to_postgres
     env_file:
       - postgres.env
+      - kafka.env
     volumes:
       - ./src/:/app/
       - ./tests:/app/tests
