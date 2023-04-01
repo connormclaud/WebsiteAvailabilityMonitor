@@ -1,9 +1,6 @@
 import asyncio
 import datetime
 import json
-import os
-
-import yaml
 
 from website_monitor.config_reader import read_config
 from website_monitor.consumer import ConsumerFactory
@@ -36,7 +33,8 @@ def create_consumer_and_writer(config):
 
     dsn = db_config["dsn"]
 
-    consumer = ConsumerFactory.get_consumer("kafka", bootstrap_servers, topic, kafka_security_protocol, kafka_ssl_config)
+    consumer = ConsumerFactory.get_consumer("kafka", bootstrap_servers, topic, kafka_security_protocol,
+                                            kafka_ssl_config)
     db_writer = DatabaseWriterFactory.get_writer("postgres", dsn)
 
     return consumer, db_writer
