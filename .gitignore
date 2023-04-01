@@ -3,6 +3,8 @@
 __pycache__/
 postgres.env
 kafka.env
+postgres.cloud.env
+kafka.cloud.env
 ca.pem
 service.cert
 service.key

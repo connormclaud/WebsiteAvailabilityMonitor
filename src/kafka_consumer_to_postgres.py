@@ -31,13 +31,12 @@ def create_consumer_and_writer(config):
     db_config = config["database"]
     bootstrap_servers = kafka_config["bootstrap_servers"]
     topic = kafka_config["topic"]
+    kafka_security_protocol = config["kafka"]["security_protocol"]
+    kafka_ssl_config = config["kafka"]["ssl"]
 
-    dsn = db_config["dsn"].format(
-        POSTGRES_USER=os.environ["POSTGRES_USER"],
-        POSTGRES_PASSWORD=os.environ["POSTGRES_PASSWORD"]
-    )
+    dsn = db_config["dsn"]
 
-    consumer = ConsumerFactory.get_consumer("kafka", bootstrap_servers, topic)
+    consumer = ConsumerFactory.get_consumer("kafka", bootstrap_servers, topic, kafka_security_protocol, kafka_ssl_config)
     db_writer = DatabaseWriterFactory.get_writer("postgres", dsn)
 
     return consumer, db_writer

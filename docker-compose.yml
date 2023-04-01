@@ -54,6 +54,7 @@ services:
       - ./tests:/app/tests
     depends_on:
       - kafka
+      - base
 
 
   kafka_consumer_to_postgres:
@@ -67,6 +68,7 @@ services:
       - ./src/:/app/
       - ./tests:/app/tests
     depends_on:
+      - base
       - postgres
       - kafka
       - website_checker

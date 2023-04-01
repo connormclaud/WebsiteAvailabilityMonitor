@@ -1,0 +1,28 @@
+services:
+  base:
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+    image: website_monitor_base
+    entrypoint: /bin/true
+
+  website_checker:
+    build:
+      context: .
+      dockerfile: Dockerfile.website_checker
+    env_file:
+      - postgres.cloud.env
+      - kafka.cloud.env
+    depends_on:
+      - base
+
+
+  kafka_consumer_to_postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile.kafka_to_postgres
+    env_file:
+      - postgres.cloud.env
+      - kafka.cloud.env
+    depends_on:
+      - base
