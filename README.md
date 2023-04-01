@@ -23,20 +23,43 @@ A Kafka consumer then stores the data in an PostgreSQL database.
    pip install -r requirements.txt
    ```
 3. Set up the necessary environment variables:
+   
+   Create `postgres.env`
    ```
-   export KAFKA_URL=<your-kafka-url>;
-   export POSTGRESQL_URL=<your-postgresql-url>;
+   POSTGRES_USER=postgresql
+   POSTGRES_PASSWORD=example
+   POSTGRES_HOST=postgres
+   POSTGRES_PORT=5432
+   POSTGRES_DB=website_metrics
    ```
+   
+   Create `kafka.env`
+   ```
+   KAFKA_HOST=kafka
+   KAFKA_PORT=9092
+   KAFKA_TOPIC=website_metrics
+   ```
+   
+   In case you want to authenticate with SSL add following:
+   ```
+   KAFKA_SECURITY_PROTOCOL=SSL
+   KAFKA_SSL_KEYFILE=service.key
+   KAFKA_SSL_CERTFILE=service.cert
+   KAFKA_SSL_CAFILE=ca.pem
+   ```
+   
 4. Configure the target websites and other settings in the `config.yml` file.
 
 ## Usage Instructions
-1. Run the Kafka producer:
+1. Run locally:
    ```
-   python website_checker.py
+   docker compose up -d --build
    ```
-2. Run the Kafka consumer:
+   This will create local Kafka and Postgresql instances
+2. Run in the cloud:
+   You must have `kafka.cloud.env` and `postgres.cloud.env`
    ```
-   python kafka_consumer_to_postgres.py
+   docker-compose -f docker-compose.cloud.yml up --build
    ```
 
 ## Contributing
@@ -45,7 +68,7 @@ We welcome contributions to the WebsiteAvailabilityMonitor project. Please follo
 1. Create a fork of the repository on GitHub.
 2. Clone your fork to your local machine.
    ```
-   git clone https://github.com/your-username/WebsiteAvailabilityMonitor.git
+   git clone https://github.com/connormclaud/WebsiteAvailabilityMonitor.git
    ```
 3. Create a new branch for your feature or bugfix.
    ```
@@ -66,7 +89,7 @@ We welcome contributions to the WebsiteAvailabilityMonitor project. Please follo
 Please ensure that your code follows the project's style guidelines and that all tests are passing before submitting a pull request.
 
 # Architecture and Design
-The WebsiteAvailabilityMonitor project is divided into three main components: the website checker, the Kafka producer, and the Kafka consumer. The architecture is designed to be modular, scalable, and easy to maintain.
+The WebsiteAvailabilityMonitor project is divided into two main components: the website checker(the Kafka producer), and the Kafka consumer (database writer). The architecture is designed to be modular, scalable, and easy to maintain.
 
 ```mermaid
 graph TD
@@ -82,9 +105,7 @@ end
 
 ## Website Checker
 The website checker is responsible for periodically checking the target websites and collecting the HTTP response time, status code, and optionally checking the returned page contents for a specified regex pattern. This component is designed to be easily extensible, allowing for the addition of new checks and metrics in the future.
-
-## Kafka Producer
-The Kafka producer receives the results of the website checks and sends the data to a Kafka topic. This component is designed to be highly performant and fault-tolerant, ensuring that the data is reliably sent to the Kafka topic even in the event of network issues or other errors.
+The Kafka producer the results of the website checks and sends the data to a Kafka topic. This component is designed to be highly performant and fault-tolerant, ensuring that the data is reliably sent to the Kafka topic even in the event of network issues or other errors.
 
 ## Kafka Consumer
 The Kafka consumer listens for messages on the Kafka topic and writes the data to an PostgreSQL database. This component is designed to handle a large number of checks and efficiently write the data to the database, ensuring data integrity and performance.
