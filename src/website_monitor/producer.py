@@ -35,6 +35,9 @@ class KafkaProducer(MessageProducer, AIOKafkaProducer):
         await self.start()
         return self
 
+    async def __aexit__(self, exc_type, exc_value, traceback):
+        await self.close()
+
 
 class ProducerFactory:
     @staticmethod

@@ -8,6 +8,7 @@ from typing import Optional, Dict
 import aiohttp
 import yaml
 
+from website_monitor.config_reader import read_config
 from website_monitor.producer import ProducerFactory
 
 
@@ -35,11 +36,6 @@ async def check_website(session: aiohttp.ClientSession, url: str, regexp: Option
     except Exception as e:
         print(f"Error checking {url}: {e}")
         return None
-
-
-def read_config(config_file_path: str) -> Dict:
-    with open(config_file_path, "r") as config_file:
-        return yaml.safe_load(config_file)
 
 
 async def process_task(future, timeout, producer, kafka_topic):

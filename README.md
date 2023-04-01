@@ -71,10 +71,8 @@ The WebsiteAvailabilityMonitor project is divided into three main components: th
 ```mermaid
 graph TD
   subgraph Website Availability Monitor
-    WebsiteChecker["Website Checker"] -->|Checks website availability and collects metrics| KafkaProducer1["Kafka Producer 1"]
-    WebsiteChecker -->|Checks website availability and collects metrics| KafkaProducer2["Kafka Producer 2"]
-    KafkaProducer1 -->|Sends metrics to| KafkaTopic["Kafka Topic"]
-    KafkaProducer2 -->|Sends metrics to| KafkaTopic
+    WebsiteChecker["Website Checker"] -->|Checks website availability, collects metrics,<br/> and sends them to| KafkaTopic["Kafka Topic"]
+    WebsiteChecker2["Website Checker2"] -->|Checks website availability, collects metrics,<br/> and sends them to| KafkaTopic["Kafka Topic"]
     KafkaTopic(("Kafka Topic: <br/> Metrics Store")) -->|Consumes metrics and stores in| KafkaConsumer1["Kafka Consumer 1"]
     KafkaTopic -->|Consumes metrics and stores in| KafkaConsumer2["Kafka Consumer 2"]
     KafkaConsumer1 -->|Writes metrics to| PostgreSQLDatabase{{PostgreSQL Database}}

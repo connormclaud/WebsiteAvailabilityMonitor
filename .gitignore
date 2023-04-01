@@ -1,4 +1,8 @@
 .coverage
 .idea/
 __pycache__/
-.postgres.env
+postgres.env
+kafka.env
+ca.pem
+service.cert
+service.key

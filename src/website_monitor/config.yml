@@ -5,12 +5,13 @@ timeout: 10
 
 # Kafka settings
 kafka:
-  bootstrap_servers: kafka:9092
-  topic: website_metrics
+  bootstrap_servers: {KAFKA_HOST}:{KAFKA_PORT}
+  topic: {KAFKA_TOPIC}
+  security_protocol: PLAINTEXT  # PLAINTEXT or SSL
 
 # PostgreSQL settings
 database:
-  dsn: "postgres://{POSTGRES_USER}:{POSTGRES_PASSWORD}@postgres:5432/website_metrics"
+  dsn: "postgres://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
 # List of target websites and their monitoring settings
 websites:

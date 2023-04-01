@@ -5,6 +5,7 @@ import os
 
 import yaml
 
+from website_monitor.config_reader import read_config
 from website_monitor.consumer import ConsumerFactory
 from website_monitor.db_writer import DatabaseWriterFactory
 
@@ -23,11 +24,6 @@ CREATE_TABLE_QUERY = """
             timestamp TIMESTAMP NOT NULL
         );
     """
-
-
-def read_config(file_path):
-    with open(file_path, "r") as config_file:
-        return yaml.safe_load(config_file)
 
 
 def create_consumer_and_writer(config):
