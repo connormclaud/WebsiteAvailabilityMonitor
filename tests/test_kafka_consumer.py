@@ -36,9 +36,10 @@ def test_create_consumer_and_writer(mock_db_writer_factory, mock_consumer_factor
     mock_consumer_factory.get_consumer.return_value = mock_consumer
 
     config = {
-        "kafka": {"bootstrap_servers": "localhost:9092", "topic": "test-topic"},
+        "kafka": {"bootstrap_servers": "localhost:9092", "topic": "test-topic", "security_protocol": "PLAINTEXT",
+                  "ssl": {}},
         "database": {
-            "dsn": "postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@localhost:5432/testdb"
+            "dsn": "postgresql://user:password@localhost:5432/testdb"
         },
     }
 
@@ -47,7 +48,7 @@ def test_create_consumer_and_writer(mock_db_writer_factory, mock_consumer_factor
     assert consumer == mock_consumer
     assert db_writer == mock_db_writer
     mock_consumer_factory.get_consumer.assert_called_once_with(
-        "kafka", "localhost:9092", "test-topic"
+        "kafka", "localhost:9092", "test-topic", 'PLAINTEXT', {}
     )
     mock_db_writer_factory.get_writer.assert_called_once_with(
         "postgres", "postgresql://user:password@localhost:5432/testdb"

@@ -1,6 +1,6 @@
 services:
   httpbin:
-    image: kennethreitz/httpbin
+    image: kennethreitz/httpbin:latest
     container_name: httpbin
 
   base:
